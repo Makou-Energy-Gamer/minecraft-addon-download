@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>マイクラアドオン配布ページ</title>
+  <style>
+    :root {
+      --bg: #e9eef5;
+      --card: rgba(255, 255, 255, 0.84);
+      --text: #111111;
+      --sub: #5a5a5a;
+      --line: rgba(0, 0, 0, 0.08);
+      --button: #111111;
+      --button-text: #ffffff;
+      --accent: #ff2a3d;
+      --accent-soft: rgba(255, 42, 61, 0.08);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family:
+        "Yu Gothic", "Hiragino Kaku Gothic ProN", "Meiryo",
+        system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: url("images/bg-blur.png") center center / cover no-repeat;
+      filter: blur(6px);
+      transform: scale(1.04);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: rgba(210, 225, 245, 0.06);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 28px 0 56px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.65s ease forwards;
+    }
+
+    .delay-1 { animation-delay: 0.08s; }
+    .delay-2 { animation-delay: 0.16s; }
+    .delay-3 { animation-delay: 0.24s; }
+    .delay-4 { animation-delay: 0.32s; }
+    .delay-5 { animation-delay: 0.40s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero {
+      background: linear-gradient(180deg, rgba(255,255,255,0.90), rgba(255,255,255,0.84));
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 22px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--accent), rgba(255, 42, 61, 0.2));
+    }
+
+    .hero-top {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .channel-icon {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      object-fit: cover;
+      background: #ececec;
+      border: 1px solid rgba(0,0,0,0.08);
+      flex-shrink: 0;
+    }
+
+    .channel-name {
+      margin: 0;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--sub);
+    }
+
+    .hero-main {
+      display: grid;
+      grid-template-columns: minmax(0, 0.96fr) minmax(500px, 1.04fr);
+      gap: 34px;
+      align-items: center;
+    }
+
+    .title {
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.12;
+      margin: 0 0 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--sub);
+      max-width: 860px;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      text-decoration: none;
+      border-radius: 12px;
+      padding: 12px 18px;
+      border: 1px solid var(--line);
+      font-weight: 700;
+      transition: transform 0.18s ease, opacity 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      opacity: 0.98;
+      box-shadow: 0 10px 18px rgba(0,0,0,0.08);
+    }
+
+    .button-main {
+      background: linear-gradient(180deg, #1a1a1a, #111111);
+      color: var(--button-text);
+      border-color: #111111;
+    }
+
+    .button-sub {
+      background: rgba(255,255,255,0.88);
+      color: #111111;
+    }
+
+    .hero-preview {
+      background: rgba(15, 15, 15, 0.92);
+      border: 1px solid rgba(255,255,255,0.62);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 10px 26px rgba(0,0,0,0.08);
+      position: relative;
+      aspect-ratio: 16 / 9;
+    }
+
+    .hero-preview video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      background: #111111;
+    }
+
+    .hero-preview-label {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 2;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #7a2430;
+      background: rgba(255,255,255,0.72);
+      border: 1px solid rgba(255, 42, 61, 0.14);
+      border-radius: 999px;
+      padding: 5px 10px;
+      backdrop-filter: blur(6px);
+    }
+
+    .section {
+      background: var(--card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.55);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 18px;
+    }
+
+    .section h2 {
+      margin: 0 0 10px;
+      font-size: 1.45rem;
+      line-height: 1.25;
+    }
+
+    .section p {
+      margin: 0 0 12px;
+    }
+
+    .muted {
+      color: var(--sub);
+    }
+
+    .mini-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .mini-card {
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 14px;
+      background: rgba(255,255,255,0.72);
+      padding: 16px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+      border-color: rgba(255, 42, 61, 0.18);
+    }
+
+    .mini-card h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      line-height: 1.35;
+    }
+
+    .mini-card p {
+      margin: 0;
+      color: var(--sub);
+      font-size: 0.93rem;
+      line-height: 1.65;
+    }
+
+    .step-list {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      margin-top: 14px;
+    }
+
+    .step-card {
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 14px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.78);
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .step-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+    }
+
+    .img-box {
+      width: 100%;
+      min-height: 300px;
+      background: #ececec;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .step-body {
+      padding: 18px;
+    }
+
+    .step-number {
+      display: inline-block;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #7a2430;
+      margin-bottom: 6px;
+      background: var(--accent-soft);
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(255, 42, 61, 0.14);
+    }
+
+    .step-body h3 {
+      margin: 0 0 8px;
+      font-size: 1.08rem;
+    }
+
+    .alert-red {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(255, 42, 61, 0.10);
+      border: 1px solid rgba(255, 42, 61, 0.22);
+      color: #b30018;
+      font-weight: 700;
+      line-height: 1.6;
+    }
+
+    .note-box {
+      border: 1px solid rgba(0,0,0,0.06);
+      background: rgba(255,255,255,0.7);
+      border-radius: 14px;
+      padding: 18px;
+    }
+
+    .note-box ul {
+      margin: 0;
+      padding-left: 1.2em;
+    }
+
+    .note-box li + li {
+      margin-top: 8px;
+    }
+
+    .footer {
+      color: #666;
+      font-size: 0.92rem;
+      text-align: center;
+      padding: 8px 0 2px;
+    }
+
+    @media (max-width: 980px) {
+      .hero-main {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-preview {
+        aspect-ratio: 16 / 9;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .mini-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .img-box {
+        min-height: 220px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero fade-up">
+      <div class="hero-top">
+        <img class="channel-icon" src="images/channel-icon.png" alt="魔晄エネルギーゲーマー チャンネルアイコン" />
+        <div>
+          <p class="channel-name">魔晄エネルギーゲーマー</p>
+        </div>
+      </div>
+
+      <div class="hero-main">
+        <div class="hero-left">
+          <h1 class="title">道路自動整備アドオン</h1>
+
+          <p class="lead">
+            Minecraft Bedrock Edition向けのアドオンです。<br>
+            UIから設定し、道路を自動で整備できます。<br>
+            バージョンによっては正常に動作しない場合があります。
+          </p>
+
+          <div class="hero-buttons">
+            <a class="button button-main" href="https://github.com/Makou-Energy-Gamer/minecraft-addon-download/releases/download/v1.0.0/road-auto-tool-v1.0.0.mcaddon" target="_blank" rel="noopener noreferrer">ダウンロード</a>
+            <a
+              class="button button-sub"
+              href="https://www.youtube.com/@%E9%AD%94%E6%99%84%E3%82%A8%E3%83%8D%E3%83%AB%E3%82%AE%E3%83%BC%E3%82%B2%E3%83%BC%E3%83%9E%E3%83%BC/shorts"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              YouTubeチャンネルへGo
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-preview">
+          <div class="hero-preview-label">動作イメージ</div>
+          <video autoplay muted loop playsinline preload="metadata">
+            <source src="images/hero-preview.mp4" type="video/mp4" />
+          </video>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade-up delay-2">
+      <h2>ポイント</h2>
+      <div class="mini-grid">
+        <div class="mini-card">
+          <h3>ベータAPIなしでも動作</h3>
+          <p>導入しやすさを重視しています。</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>安定性を重視</h3>
+          <p>できるだけ破綻しにくいよう調整しています。</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>状態を表示</h3>
+          <p>エラーや案内を確認しやすくしています。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade-up delay-3">
+      <h2>できること</h2>
+      <div class="mini-grid">
+        <div class="mini-card">
+          <h3>UIで設定</h3>
+          <p>幅や種類などを直感的に設定できます。</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>道路を自動生成</h3>
+          <p>設定に応じて道路を自動で整備できます。</p>
+        </div>
+
+        <div class="mini-card">
+          <h3>状況を確認しながら使える</h3>
+          <p>表示される案内を見ながら進められます。</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section fade-up delay-4">
+      <h2>導入手順</h2>
+      <div class="step-list">
+        <article class="step-card">
+          <div class="img-box">
+            <img src="images/step2.png" alt="導入手順1の画像" />
+          </div>
+          <div class="step-body">
+            <span class="step-number">手順 1</span>
+            <h3>ファイルを開いてMinecraftにインポート</h3>
+            <p class="muted">
+              ダウンロードしたファイルを開き、Minecraftにインポートします。
+            </p>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="img-box">
+            <img src="images/step3.png" alt="導入手順2の画像" />
+          </div>
+          <div class="step-body">
+            <span class="step-number">手順 2</span>
+            <h3>アドオンをワールドに適用</h3>
+            <p class="muted">
+              ワールドの設定から、リソースパックとビヘイビアーパックの場所に行き、ワールドに適用してください。
+            </p>
+            <div class="alert-red">
+              リソースパックとビヘイビアーパック、どちらも適用しないと動きません。
+            </div>
+          </div>
+        </article>
+
+        <article class="step-card">
+          <div class="img-box">
+            <img src="images/step4.png" alt="導入手順3の画像" />
+          </div>
+          <div class="step-body">
+            <span class="step-number">手順 3</span>
+            <h3>ワールド内で起動して使う</h3>
+            <p class="muted">
+              エラーや注意事項が出た場合は、コマンド欄の表示を確認してください。
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section fade-up delay-5">
+      <h2>注意点</h2>
+      <div class="note-box">
+        <ul>
+          <li>念のため、導入前にワールドのバックアップを取ることをおすすめします。</li>
+          <li>Minecraftのバージョンによっては正常に動作しない場合があります。</li>
+          <li>このアドオンは、対象範囲が読み込まれている前提で動作します。読み込みチャンク設定が狭い場合、正常に使えないことがあります。</li>
+        </ul>
+      </div>
+    </section>
+
+    <div class="footer fade-up delay-5">
+      魔晄エネルギーゲーマー / Minecraft Add-on Distribution Page
+    </div>
+  </div>
+</body>
+</html>
